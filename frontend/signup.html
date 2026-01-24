@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up | PetConnect</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="container">
+    <div class="card" style="max-width:450px; margin:auto;">
+      <h2 style="text-align:center; margin-bottom:20px;">Create Account</h2>
+
+    <input id="signup-name" type="text" placeholder="Full Name" required>
+    <input id="signup-email" type="email" placeholder="Email" required>
+    <input id="signup-password" type="password" placeholder="Password" required>
+
+
+      <button class="btn btn-primary" onclick="signup(event)">
+      Sign Up
+      </button>
+
+
+      <p style="text-align:center; margin-top:15px;">
+        Already have an account?
+        <a href="login.html" style="color:#4f46e5;">Login</a>
+      </p>
+    </div>
+  </div>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard | PetConnect</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <div class="logo">PetConnect 🐾</div>
+    <div class="nav-links">
+      <a href="profile.html">My Pet</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- CREATE POST -->
+    <div class="card" style="margin-bottom:30px;">
+      <textarea placeholder="Share something about your pet..."
+        style="width:100%; height:80px; padding:12px;"></textarea>
+
+      <button class="btn btn-primary" style="margin-top:10px;">
+        Post
+      </button>
+    </div>
+
+    <!-- FEED -->
+    <div class="card" style="margin-bottom:20px;">
+      <h4>Buddy 🐕</h4>
+      <p style="margin-top:10px;">
+        Had a great playtime at the park today! 🌳
+      </p>
+    </div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <h4>Luna 🐶</h4>
+      <p style="margin-top:10px;">
+        First grooming session done ✂️
+      </p>
+    </div>
+
+  </div>
+<script>
+  // Protect dashboard
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    alert("Please login first");
+    window.location.href = "login.html";
+  }
+</script>
+<script>
+  function logout() {
+    localStorage.removeItem("token");
+    alert("Logged out successfully");
+    window.location.href = "login.html";
+  }
+</script>
+
+</body>
+</html>

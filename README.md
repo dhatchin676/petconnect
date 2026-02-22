@@ -2,7 +2,7 @@
 
 A full-stack social platform for pet owners — create a profile for your pet, share photos and videos, like and comment on posts, and connect with a community that gets it.
 
-**Live Demo:** [inspiring-banoffee-97b633.netlify.app](https://petconnect-app.netlify.app)
+**Live Demo:** [petconnect-app.netlify.app](https://petconnect-app.netlify.app)
 
 ---
 

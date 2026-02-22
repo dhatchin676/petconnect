@@ -21,12 +21,10 @@ router.post(
 
       if (req.file) {
         const isVideo = req.file.mimetype.startsWith("video/");
-
         const result = await cloudinary.uploader.upload(req.file.path, {
           resource_type: isVideo ? "video" : "image",
           folder: "petconnect"
         });
-
         mediaUrl = result.secure_url;
         mediaType = isVideo ? "video" : "image";
       }
@@ -84,6 +82,34 @@ router.post("/:id/comment", auth, async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Failed to add comment" });
+  }
+});
+
+/* DELETE COMMENT */
+router.delete("/:id/comment/:commentId", auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: "Post not found" });
+
+    const comment = post.comments.id(req.params.commentId);
+    if (!comment) return res.status(404).json({ message: "Comment not found" });
+
+    // Only the comment owner can delete it
+    if (comment.user.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Not allowed" });
+    }
+
+    post.comments.pull({ _id: req.params.commentId });
+    await post.save();
+
+    const updated = await Post.findById(req.params.id)
+      .populate("user", "name bio profileImage")
+      .populate("comments.user", "name profileImage");
+
+    res.json(updated);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to delete comment" });
   }
 });
 

@@ -1,4 +1,4 @@
-const API = "https://petconnect-1-54kt.onrender.com/api";
+const API = "http://localhost:5000/api";
 const token = localStorage.getItem("token");
 
 if (!token) location.href = "login.html";
@@ -32,6 +32,18 @@ function logout() {
 }
 
 /* =====================
+   GET CURRENT USER ID from token
+===================== */
+function getCurrentUserId() {
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.id;
+  } catch {
+    return null;
+  }
+}
+
+/* =====================
    CREATE POST
 ===================== */
 async function createPost() {
@@ -41,7 +53,7 @@ async function createPost() {
 
   const fd = new FormData();
   fd.append("text", text);
-  if (file) fd.append("image", file); // backend reads this as "image" field
+  if (file) fd.append("image", file);
 
   await fetch(`${API}/posts`, {
     method: "POST",
@@ -55,12 +67,11 @@ async function createPost() {
 }
 
 /* =====================
-   RENDER MEDIA — image or video
+   RENDER MEDIA
 ===================== */
 function renderMedia(post) {
   if (!post.image) return "";
 
-  // Use mediaType field if available, else guess from URL
   const isVideo = post.mediaType === "video" ||
     /\.(mp4|webm|mov|avi)(\?|$)/i.test(post.image) ||
     post.image.includes("/video/upload/");
@@ -153,7 +164,7 @@ async function likePost(id) {
 }
 
 /* =====================
-   DELETE
+   DELETE POST
 ===================== */
 async function deletePost(id) {
   if (!confirm("Delete this post?")) return;
@@ -183,11 +194,12 @@ function closeComments() {
 }
 
 /* =====================
-   RENDER COMMENTS
+   RENDER COMMENTS — with delete button for own comments
 ===================== */
 function renderCommentList(postId) {
   const list = document.getElementById("commentList");
   const comments = localComments[postId] || [];
+  const currentUserId = getCurrentUserId();
 
   list.innerHTML = "";
 
@@ -203,6 +215,9 @@ function renderCommentList(postId) {
 
   comments.forEach(c => {
     const name = c.user?.name || c.name || "User";
+    const commentUserId = c.user?._id || c.user;
+    const isOwner = currentUserId && commentUserId && commentUserId.toString() === currentUserId;
+
     const el = document.createElement("div");
     el.className = "comment-item";
     el.innerHTML = `
@@ -211,11 +226,38 @@ function renderCommentList(postId) {
         <span class="comment-username">${name}</span>
         <span class="comment-text">${c.text}</span>
       </div>
+      ${isOwner ? `<button class="comment-delete-btn" onclick="deleteComment('${postId}', '${c._id}')">🗑</button>` : ""}
     `;
     list.appendChild(el);
   });
 
   list.scrollTop = list.scrollHeight;
+}
+
+/* =====================
+   DELETE COMMENT
+===================== */
+async function deleteComment(postId, commentId) {
+  if (!confirm("Delete this comment?")) return;
+
+  // Remove from local cache immediately
+  if (localComments[postId]) {
+    localComments[postId] = localComments[postId].filter(c => c._id !== commentId);
+  }
+  renderCommentList(postId);
+
+  // Update count in feed
+  const countEl = document.getElementById(`comment-count-${postId}`);
+  if (countEl) countEl.textContent = Math.max(0, parseInt(countEl.textContent) - 1);
+
+  try {
+    await fetch(`${API}/posts/${postId}/comment/${commentId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  } catch (err) {
+    console.error("Failed to delete comment:", err);
+  }
 }
 
 /* =====================

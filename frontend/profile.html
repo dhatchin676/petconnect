@@ -1,34 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>My Pet | PetConnect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <div class="navbar">
+  <nav class="navbar">
     <div class="logo">PetConnect 🐾</div>
-    <div class="nav-links">
-      <a href="dashboard.html">Dashboard</a>
-      <a href="login.html">Logout</a>
+    <div class="nav-actions">
+      <button onclick="location.href='dashboard.html'">Feed</button>
+      <button onclick="logout()">Logout</button>
     </div>
-  </div>
+  </nav>
 
-  <div class="container">
-    <div class="card" style="max-width:600px; margin:auto;">
-      <h2>My Pet Profile</h2>
+  <main class="container">
+    <div class="card profile-card">
 
-      <p><strong>Name:</strong> Buddy</p>
-      <p><strong>Breed:</strong> Golden Retriever</p>
-      <p><strong>Age:</strong> 2 years</p>
+      <img
+        id="profileImg"
+        class="profile-img"
+        src="https://via.placeholder.com/150"
+        alt="Pet Profile"
+      />
 
-      <button class="btn btn-outline" style="margin-top:15px;">
-        Edit Profile
-      </button>
+      <label class="change-photo-btn">
+        📷 Change Profile Photo
+        <input type="file" id="profileImage" accept="image/*" hidden/>
+      </label>
+
+      <div class="success-msg" id="success-msg">Profile updated! 🐾</div>
+      <div class="error-msg" id="error-msg"></div>
+
+      <input type="text" id="petName" placeholder="Pet Name"/>
+      <textarea id="bio" placeholder="Tell us about your pet..."></textarea>
+
+      <button class="profile-save-btn" onclick="updateProfile()">Save Profile</button>
+
     </div>
-  </div>
+  </main>
 
+  <script src="js/profile.js"></script>
 </body>
 </html>

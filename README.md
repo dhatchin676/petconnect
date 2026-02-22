@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 🐾 PetConnect (Demo)
 
 PetConnect is a **full-stack social platform for pet owners** where users can create accounts, log in securely, and share updates about their pets.  
@@ -68,6 +67,5 @@ petconnect/
 
 
 
-=======
+
 # petconnect
->>>>>>> 578e14b9ac1e4d820ec0500510d1f9b38621e32c

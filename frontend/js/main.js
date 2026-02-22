@@ -1,4 +1,4 @@
-const API = "http://localhost:5000/api";
+const API = "https://petconnect-1-54kt.onrender.com/api";
 const token = localStorage.getItem("token");
 
 if (!token) location.href = "login.html";

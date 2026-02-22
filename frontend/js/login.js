@@ -1,4 +1,4 @@
-const API = "http://localhost:5000/api";
+const API = "https://petconnect-1-54kt.onrender.com/api";
 
 async function login() {
   const email = document.getElementById("login-email").value.trim();
